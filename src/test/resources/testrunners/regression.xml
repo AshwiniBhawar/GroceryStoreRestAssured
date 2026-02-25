@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="API Regression Tests Suite" verbose="3">
+
+    <listeners>
+        <listener class-name="com.aventstack.chaintest.plugins.ChainTestListener" />
+    </listeners>
+
+    <test name="Grocery Store Orders-Create">
+        <classes>
+            <class name="com.qa.grocerystoreorders.tests.CreateAOrderTest"/>
+        </classes>
+    </test>
+    <test name="Grocery Store Orders-Update">
+        <classes>
+            <class name="com.qa.grocerystoreorders.tests.UpdateAnOrderTest"/>
+        </classes>
+    </test>
+    <test name="Grocery Store Orders-Delete">
+        <classes>
+            <class name="com.qa.grocerystoreorders.tests.DeleteAnOrderTest"/>
+        </classes>
+    </test>
+    <test name="Grocery Store Orders-RegisterNewClient">
+        <classes>
+            <class name="com.qa.grocerystoreorders.tests.RegisterNewClientTest"/>
+        </classes>
+    </test>
+    <test name="Grocery Store Orders-Get Orders With OM">
+        <classes>
+            <class name="com.qa.grocerystoreorders.tests.GetAllOrdersWithObjectMapperTest"/>
+        </classes>
+    </test>
+    <test name="Grocery Store Orders-Get Orders Without OM">
+        <classes>
+            <class name="com.qa.grocerystoreorders.tests.GetAllOrdersWithoutObjectMapperTest"/>
+        </classes>
+    </test>
+
+    <test name="Grocery Store Products-Get API Status">
+        <classes>
+            <class name="com.qa.grocerystoreproducts.tests.GetAPIStatusTest"/>
+        </classes>
+    </test>
+    <test name="Grocery Store Products- Create Cart">
+        <classes>
+            <class name="com.qa.grocerystoreproducts.tests.CreateACartTest"/>
+        </classes>
+    </test>
+    <test name="Grocery Store Products- Add A Product">
+        <classes>
+            <class name="com.qa.grocerystoreproducts.tests.AddAProductToCartTest"/>
+        </classes>
+    </test>
+    <test name="Grocery Store Products-Update Product">
+        <classes>
+            <class name="com.qa.grocerystoreproducts.tests.UpdateAProductTest"/>
+        </classes>
+    </test>
+    <test name="Grocery Store Products-Replace A Product">
+        <classes>
+            <class name="com.qa.grocerystoreproducts.tests.ReplaceAProductTest"/>
+        </classes>
+    </test>
+    <test name="Grocery Store Products-Delete A Product">
+        <classes>
+             <class name="com.qa.grocerystoreproducts.tests.DeleteAProductTest"/>
+        </classes>
+    </test>
+    <test name="Grocery Store Products-Get Products">
+        <classes>
+            <class name="com.qa.grocerystoreproducts.tests.GetAllProductsTest"/>
+        </classes>
+    </test>
+</suite>

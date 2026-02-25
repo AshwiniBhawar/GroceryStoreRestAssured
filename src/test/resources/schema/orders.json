@@ -1,0 +1,57 @@
+{
+  "type": "array",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "",
+  "minItems": 1,
+  "uniqueItems": true,
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "items",
+      "customerName",
+      "created",
+      "comment"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "items": {
+        "type": "array",
+        "uniqueItems": true,
+        "minItems": 1,
+        "items": {
+          "required": [
+            "productId",
+            "id",
+            "quantity"
+          ],
+          "properties": {
+            "productId": {
+              "type": "number"
+            },
+            "id": {
+              "type": "number"
+            },
+            "quantity": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "customerName": {
+        "type": "string",
+        "minLength": 1
+      },
+      "created": {
+        "type": "string",
+        "minLength": 1
+      },
+      "comment": {
+        "type": "string"
+      }
+    }
+  }
+}
