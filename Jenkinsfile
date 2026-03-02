@@ -45,17 +45,17 @@ pipeline {
             }
         }
 
-        stage('Publish Allure Report For QA') {
-                steps {
-                     allure([
-                         includeProperties: false,
-                         jdk: '',
-                         properties:[],
-                         reportBuildPolicy: 'ALWAYS',
-                         results: [[path: 'allure-results']]
-                     ])
-                }
-        }
+//         stage('Publish Allure Report For QA') {
+//                 steps {
+//                      allure([
+//                          includeProperties: false,
+//                          jdk: '',
+//                          properties:[],
+//                          reportBuildPolicy: 'ALWAYS',
+//                          results: [[path: 'allure-results']]
+//                      ])
+//                 }
+//         }
 
         stage('Publish ChainTest Report For QA') {
              steps {
@@ -86,7 +86,7 @@ pipeline {
                }
         }
 
-        stage('Publish Allure Report For UAT') {
+        stage('Publish Allure Report') {
                 steps {
                     allure([
                          includeProperties: false,
