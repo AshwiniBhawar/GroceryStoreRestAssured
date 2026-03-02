@@ -51,7 +51,7 @@ pipeline {
                          includeProperties: false,
                          jdk: '',
                          properties:[],
-                         resultBuildPolicy: 'ALWAYS',
+                         reportBuildPolicy: 'ALWAYS',
                          results: [[path: 'allure-results']]
                      ])
                 }
@@ -92,7 +92,7 @@ pipeline {
                          includeProperties: false,
                          jdk: '',
                          properties:[],
-                         resultBuildPolicy: 'ALWAYS',
+                         reportBuildPolicy: 'ALWAYS',
                          results: [[path: 'allure-results']]
                          ])
                 }
