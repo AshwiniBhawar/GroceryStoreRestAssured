@@ -10,11 +10,12 @@ import org.testng.annotations.BeforeTest;
 //@Listeners(ChainTestListener.class)
 public class BaseTest {
     protected RestClient restClient;
-    /************************************API Base URLs************************************/
-    protected final static String GROCERY_STORE_BASEURL= "https://simple-grocery-store-api.glitch.me";
-    protected final static String GROCERY_STORE_BASEURL_REDIRECTION="https://simple-grocery-store-api.click";
-    protected final static String BASIC_AUTH_URL="https://the-internet.herokuapp.com";
-    protected final static String GOREST_USER_XML_URL="https://gorest.co.in";
+
+    /************************************API Base URLs Initialization************************************/
+    protected static String GROCERY_STORE_BASEURL;
+    protected static String GROCERY_STORE_BASEURL_REDIRECTION;
+    protected static String BASIC_AUTH_URL;
+    protected static String GOREST_USER_XML_URL;
 
     /************************************API EndPoints URLs************************************/
     protected final static String GROCERY_STORE_STATUS_ENDPOINTS= "/status";
@@ -36,5 +37,11 @@ public class BaseTest {
     public void setUp(){
         restClient= new RestClient();
         ConfigManager.initProp();
+
+        /************************************API Base URLs Declaration************************************/
+       GROCERY_STORE_BASEURL= ConfigManager.getProp("grocery_store_url");
+       GROCERY_STORE_BASEURL_REDIRECTION=ConfigManager.getProp("grocery_store_redirection_url");
+       BASIC_AUTH_URL=ConfigManager.getProp("basic_auth_url");
+       GOREST_USER_XML_URL=ConfigManager.getProp("gorest_user_xml_url");
     }
 }

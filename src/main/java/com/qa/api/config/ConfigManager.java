@@ -12,28 +12,25 @@ public class ConfigManager {
 
     public static void initProp() {
         FileInputStream fip = null;
-        String envName = System.getProperty("env");
+        String envName = System.getProperty("env", "qa");
+        System.out.println("Env name is :"+envName);
         try {
-            if (envName == null) {
-                fip = new FileInputStream("./src/test/resources/config/config.qa.properties");
-            } else {
                 switch (envName.toLowerCase().trim()) {
                     case "qa":
-                        fip = new FileInputStream("./src/test/resources/config/config.qa.properties");
+                        fip = new FileInputStream("./src/test/resources/config/config_qa.properties");
                         break;
                     case "dev":
-                        fip = new FileInputStream("./src/test/resources/config/config.dev.properties");
+                        fip = new FileInputStream("./src/test/resources/config/config_dev.properties");
                         break;
                     case "uat":
-                        fip = new FileInputStream("./src/test/resources/config/config.uat.properties");
+                        fip = new FileInputStream("./src/test/resources/config/config_uat.properties");
                         break;
                     case "prod":
-                        fip = new FileInputStream("./src/test/resources/config/config.prod.properties");
+                        fip = new FileInputStream("./src/test/resources/config/config_prod.properties");
                         break;
                     default:
                         throw new APIException("========Invalid Environment=========");
                 }
-            }
         } catch (FileNotFoundException e) {
             throw new APIException("File not found for " + envName + " env");
         }

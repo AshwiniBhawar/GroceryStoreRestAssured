@@ -40,22 +40,10 @@ pipeline {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
                     git 'https://github.com/AshwiniBhawar/GroceryStoreRestAssured.git'
-                    bat "mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/regression.xml"
+                    bat "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/regression.xml -Denv=qa"
                 }
             }
         }
-
-//         stage('Publish Allure Report For QA') {
-//                 steps {
-//                      allure([
-//                          includeProperties: false,
-//                          jdk: '',
-//                          properties:[],
-//                          reportBuildPolicy: 'ALWAYS',
-//                          results: [[path: 'allure-results']]
-//                      ])
-//                 }
-//         }
 
         stage('Publish ChainTest Report For QA') {
              steps {
@@ -81,7 +69,7 @@ pipeline {
               steps {
                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
                         git 'https://github.com/AshwiniBhawar/GroceryStoreRestAssured.git'
-                        bat "mvn clean test -DsuiteXmlFile=src/test/resources/testrunners/sanity.xml"
+                        bat "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/sanity.xml -Denv=uat"
                    }
                }
         }
