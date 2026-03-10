@@ -35,6 +35,12 @@ pipeline {
 			}
         }
 
+        stage("Deploy to QA") {
+              steps {
+                   echo "Deploying to QA"
+             }
+        }
+
         stage('Checkout Code') {
               steps {
                   git 'https://github.com/AshwiniBhawar/APIFramaework.git'
@@ -62,19 +68,13 @@ pipeline {
               }
         }
 
-        stage("Deploy to QA") {
-            steps {
-               echo "Deploying to QA"
-            }
-        }
-
         stage('Run QA API Automation Tests') {
            steps {
                 script {
                     def status = bat(
                         script: """
                             docker run --rm -v "%WORKSPACE%":/app -w /app %DOCKER_IMAGE% \
-                            mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunner/sanity.xml -Denv=qa
+                            mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/sanity.xml -Denv=qa
                         """,
                         returnStatus: true
                 )
@@ -111,7 +111,7 @@ pipeline {
                        def status = bat(
                         script: """
                         docker run --rm -v "%WORKSPACE%":/app -w /app %DOCKER_IMAGE% \
-                        mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunner/regression.xml -Denv=uat
+                        mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/regression.xml -Denv=uat
                         """,
                   returnStatus: true
                  )
