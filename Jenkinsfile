@@ -5,6 +5,11 @@ pipeline {
 		maven 'Maven'
 	}
 
+	environment {
+            DOCKER_IMAGE = "ashwinibhawar2892/grocerystoreframework:${BUILD_NUMBER}"
+            DOCKER_CREDENTIALS_ID = 'dockerhub_credentials'
+        }
+
   stages {
 		
 		stage('Clean Workspace') {
@@ -30,31 +35,66 @@ pipeline {
 			}
         }
 
-        stage("Deploy to QA"){
-            steps{
-                echo("Deploy to QA")
+        stage('Checkout Code') {
+              steps {
+                  git 'https://github.com/AshwiniBhawar/APIFramaework.git'
+              }
+        }
+
+        stage('Build Docker Image') {
+              steps {
+                   bat "docker build -t %DOCKER_IMAGE% ."
+              }
+        }
+
+        stage('Push Docker Image to Docker Hub') {
+              steps {
+                    withCredentials([usernamePassword(
+                    credentialsId: "${DOCKER_CREDENTIALS_ID}",
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+              )]) {
+                    bat '''
+                    echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+                    docker push %DOCKER_IMAGE%
+                    '''
+                    }
+              }
+        }
+
+        stage("Deploy to QA") {
+            steps {
+               echo "Deploying to QA"
             }
         }
 
-        stage('Run QA Tests') {
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
-                    git 'https://github.com/AshwiniBhawar/GroceryStoreRestAssured.git'
-                    bat "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/regression.xml -Denv=qa"
-                }
-            }
+        stage('Run QA API Automation Tests') {
+           steps {
+                script {
+                    def status = bat(
+                        script: """
+                            docker run --rm -v "%WORKSPACE%":/app -w /app %DOCKER_IMAGE% \
+                            mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunner/sanity.xml -Denv=qa
+                        """,
+                        returnStatus: true
+                )
+             if (status != 0) {
+                 currentBuild.result = 'UNSTABLE'
+                 }
+             }
+           }
         }
 
         stage('Publish ChainTest Report For QA') {
              steps {
                  publishHTML([
-                      allowMissing: false,
-                      alwaysLinkToLastBuild: false,
-                      keepAll: true,
-                      reportDir: 'target/chaintest',
-                      reportFiles: '*.html',
-                      reportName: 'HTML QA API Report',
-                      reportTitles: ''
+                     allowMissing: false,
+                     alwaysLinkToLastBuild: false,
+                     keepAll: true,
+                     reportDir: 'target/chaintest',
+                     reportFiles: '*.html',
+                     reportName: 'HTML QA API Report',
+                     reportTitles: ''
                  ])
              }
         }
@@ -65,25 +105,21 @@ pipeline {
               }
         }
 
-        stage('Run UAT Tests') {
-              steps {
-                   catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
-                        git 'https://github.com/AshwiniBhawar/GroceryStoreRestAssured.git'
-                        bat "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/sanity.xml -Denv=uat"
-                   }
-               }
-        }
-
-        stage('Publish Allure Report') {
-                steps {
-                    allure([
-                         includeProperties: false,
-                         jdk: '',
-                         properties:[],
-                         reportBuildPolicy: 'ALWAYS',
-                         results: [[path: 'allure-results']]
-                         ])
-                }
+        stage('Run UAT API Automation Tests') {
+            steps {
+                 script {
+                       def status = bat(
+                        script: """
+                        docker run --rm -v "%WORKSPACE%":/app -w /app %DOCKER_IMAGE% \
+                        mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testrunner/regression.xml -Denv=uat
+                        """,
+                  returnStatus: true
+                 )
+                 if (status != 0) {
+                   currentBuild.result = 'UNSTABLE'
+                 }
+                 }
+            }
         }
 
         stage('Publish ChainTest Report For UAT') {
@@ -98,6 +134,18 @@ pipeline {
                          reportTitles: ''
                      ])
                 }
+        }
+
+        stage('Publish Allure Report') {
+            steps {
+                    allure([
+                       includeProperties: false,
+                       jdk: '',
+                       properties:[],
+                       reportBuildPolicy: 'ALWAYS',
+                        results: [[path: 'allure-results']]
+                    ])
+            }
         }
   }
 }
