@@ -1,6 +1,6 @@
-# E-Commerce OpenCart Website
+# Grocery Store API Automation Framework
 
-This is a Grocery Store API automation framework. This framework automates apis using Rest Assured, Java, TestNG, Maven, and integrated with GitHub, Docker, Jenkins. 
+This framework automates apis using Rest Assured, Java, TestNG, Maven, and integrated with GitHub, Docker, Jenkins. 
 
 ## Tools And Technologies Used To Automate Website
 
